@@ -101,7 +101,9 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         result.success(signatures.getOrNull(0))
     }
 
+
     private fun requestHint(result: MethodChannel.Result) {
+        pendingResult = result
         val request: GetPhoneNumberHintIntentRequest =
             GetPhoneNumberHintIntentRequest.builder().build()
 
@@ -217,10 +219,9 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     private fun onHintRequest(resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
-            if (data.hasExtra(SmsRetriever.EXTRA_SMS_MESSAGE)) {
-                val phoneNumber: String =
-                    Identity.getSignInClient(mContext).getPhoneNumberFromIntent(data)
-                ignoreIllegalState { pendingResult?.success(phoneNumber) }
+            val hint: String? = data.getStringExtra("phone_number_hint_result")
+            if (hint != null) {
+                ignoreIllegalState { pendingResult?.success(hint) }
                 return
             }
         }

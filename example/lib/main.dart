@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:smart_auth/smart_auth.dart';
@@ -65,12 +67,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void requestHint() async {
-    final res = await smartAuth.requestHint(
-      isPhoneNumberIdentifierSupported: true,
-      isEmailAddressIdentifierSupported: true,
-      showCancelButton: true,
-    );
-    debugPrint('requestHint: $res');
+    final String? res = await smartAuth.requestHint();
+    log('requestHint: $res');
   }
 
   void removeSmsListener() {
